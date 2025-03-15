@@ -46,6 +46,7 @@ def predict():
         logging.error(f"Error occurred: {e}")
         return jsonify({"error": "An error occurred"}), 500
 
-if __name__ == '__main__':
+if __name__=='__main__':
+    app.run(debug=True,host='0.0.0.0')
     logging.info("Starting the Flask application")
     app.run(debug=True)

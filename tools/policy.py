@@ -4,11 +4,11 @@ import numpy as np
 from langchain_core.tools import tool
 import google.generativeai as genai
 from dotenv import load_dotenv
-import os
+from config.config import Config
 
 load_dotenv()
 # Retrieve the API key
-gemini_api_key = os.getenv("GEMINI_API_KEY")
+gemini_api_key = Config.GEMINI_API_KEY
 # Pass it to the configure method
 genai.configure(api_key=gemini_api_key)
 

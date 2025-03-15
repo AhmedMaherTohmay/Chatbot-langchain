@@ -2,16 +2,16 @@
 from tools import lookup_policy, search_transactions
 from utils import create_tool_node_with_fallback
 from prompt import Assistant, bot_prompt
+from config.config import Config
 
 ######################################### LLM #########################################
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 # Retrieve the API key
-gemini_api_key = os.getenv("GEMINI_API_KEY")
+gemini_api_key = Config.GEMINI_API_KEY
 # Pass it to the configure method
 genai.configure(api_key=gemini_api_key)
 
