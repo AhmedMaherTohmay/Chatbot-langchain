@@ -3,10 +3,15 @@ import requests
 import numpy as np
 from langchain_core.tools import tool
 import google.generativeai as genai
+from dotenv import load_dotenv
+import os
 
-# Configure the API key
-gemini='AIzaSyBiJbXUIdGeupUaIZx1y1DxRZSiHdZFDtY'
-genai.configure(api_key=gemini)
+load_dotenv()
+# Retrieve the API key
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+# Pass it to the configure method
+genai.configure(api_key=gemini_api_key)
+
 
 # Function to generate embeddings using Google's Text Embedding 004
 def generate_embedding(text: str) -> list[float]:
@@ -63,4 +68,5 @@ def lookup_policy(query: str) -> str:
         return "I couldn't find any relevant information. Please contact our support team for further assistance."
     return "\n\n".join([doc["page_content"] for doc in docs])
 
-# print(lookup_policy("what is the app name"))
+if __name__ == "__main__":
+    print(lookup_policy("what is the app name"))

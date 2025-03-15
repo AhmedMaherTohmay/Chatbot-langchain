@@ -1,20 +1,22 @@
-#Python files
-from policy import lookup_policy
-from search import search_transactions
+#Python Packages
+from tools import lookup_policy, search_transactions
 from utils import create_tool_node_with_fallback
 from prompt import Assistant, bot_prompt
 
 ######################################### LLM #########################################
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
+from dotenv import load_dotenv
+import os
 
-# Configure the API key
-# groq_api_key='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'
-gemini='AIzaSyBiJbXUIdGeupUaIZx1y1DxRZSiHdZFDtY'
-genai.configure(api_key=gemini)
+load_dotenv()
+# Retrieve the API key
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+# Pass it to the configure method
+genai.configure(api_key=gemini_api_key)
 
 # using gemnini api
-llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=gemini)
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=gemini_api_key)
 part_1_tools = [search_transactions, lookup_policy]
 part_1_assistant_runnable = bot_prompt() | llm.bind_tools(part_1_tools)
 
@@ -77,31 +79,21 @@ def llm_response(message: str) -> str:
     assistant_response = response["messages"][-1].content
     return assistant_response
 
+if __name__ == "__main__":
+    while True:
+        # Initialize the graph with the first question
+        print("User: ", end='')
+        user_question = input()
 
-# for i in range(2):
-#     # Initialize the graph with the first question
-#     print("User: ", end='')
-#     user_question = input()
-#     response = part_1_graph.invoke(
-#         {"messages": [("user", user_question)]},
-#         config=config,
-#     )
+        if user_question.lower() in ["quit", "exit", "end",'q','ex']:
+            print("Assistant: Goodbye! Have a great day!")
+            break  # Exit the loop when the user says 'quit', 'exit', or 'end'
 
-#     # Extract and print the assistant's response
-#     assistant_response = response["messages"][-1].content
-#     print(f"Assistant: {assistant_response}\n")
-
-
-# # Simulate the conversation
-# for question in tutorial_questions:
-#     print(f"User: {question}")
-
-#     # Invoke the graph with the user's question
-#     response = part_1_graph.invoke(
-#         {"messages": [("user", question)]},
-#         config=config,
-#     )
-
-#     # Extract and print the assistant's response
-#     assistant_response = response["messages"][-1].content
-#     print(f"Assistant: {assistant_response}\n")
+        response = part_1_graph.invoke(
+            {"messages": [("user", user_question)]},
+            config=config,
+        )
+    
+        # Extract and print the assistant's response
+        assistant_response = response["messages"][-1].content
+        print(f"Assistant: {assistant_response}\n")

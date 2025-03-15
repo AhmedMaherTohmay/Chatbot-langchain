@@ -5,9 +5,15 @@ from typing_extensions import TypedDict
 from langgraph.graph.message import AnyMessage, add_messages
 from langchain_core.prompts import ChatPromptTemplate
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
-gemini='AIzaSyBiJbXUIdGeupUaIZx1y1DxRZSiHdZFDtY'
-genai.configure(api_key=gemini)
+load_dotenv()
+# Retrieve the API key
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+# Pass it to the configure method
+genai.configure(api_key=gemini_api_key)
+
 
 class State(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]

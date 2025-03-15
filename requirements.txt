@@ -18,3 +18,5 @@ MarkupSafe
 flask_restful
 requests
 flask_cors
+python-dotenv
+pytest
