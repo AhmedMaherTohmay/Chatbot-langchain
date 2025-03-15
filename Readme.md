@@ -1,4 +1,4 @@
-# Project Name
+# Chatbot_langchain
 
 A chatbot for customer support, powered by Gemini and Flask.
 
