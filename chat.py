@@ -69,15 +69,14 @@ config = {
     }
 }
 
-def llm_response(message: str) -> str:
-    response = part_1_graph.invoke(
-        {"messages": [("user", message)]},
-        config=config,
-    )
-
-    # Extract and print the assistant's response
-    assistant_response = response["messages"][-1].content
-    return assistant_response
+def llm_response(message: str):
+    for chunk, metadata in part_1_graph.stream(   # streaming the output
+        {"messages": message},
+        config,
+        stream_mode="messages",
+    ):
+        if hasattr(chunk, "content"):  # Check if 'chunk' has a 'content' attribute
+            yield chunk.content 
 
 if __name__ == "__main__":
     while True:
@@ -89,11 +88,8 @@ if __name__ == "__main__":
             print("Assistant: Goodbye! Have a great day!")
             break  # Exit the loop when the user says 'quit', 'exit', or 'end'
 
-        response = part_1_graph.invoke(
-            {"messages": [("user", user_question)]},
-            config=config,
-        )
-    
-        # Extract and print the assistant's response
-        assistant_response = response["messages"][-1].content
-        print(f"Assistant: {assistant_response}\n")
+        print("Assistant: ", end="")  # Print the prefix for the assistant's response
+        # Stream and print each chunk
+        for response_chunk in llm_response(user_question):
+            print(response_chunk, end="", flush=True)  # Print each chunk as it's received
+        print()  # Add a newline after the complete response
