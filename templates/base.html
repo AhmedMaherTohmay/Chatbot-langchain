@@ -9,34 +9,42 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="chatbox">
-            <div class="chatbox__support">
-                <div class="chatbox__header">
-                    <div class="chatbox__image--header">
-                        <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-5--v1.png"
-                            alt="bot avatar">
-                    </div>
-                    <div class="chatbox__content--header">
-                        <h4 class="chatbox__heading--header">Payment Support</h4>
-                        <p class="chatbox__description--header">Hi! I'm Paynow. How can I assist you with your payments?
-                        </p>
-                    </div>
+    <div class="chatbox">
+        <!-- Chatbox Support Section -->
+        <div class="chatbox__support">
+            <!-- Chatbox Header -->
+            <div class="chatbox__header">
+                <div class="chatbox__image--header">
+                    <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-5--v1.png"
+                        alt="bot avatar">
                 </div>
-                <div class="chatbox__messages">
-                    <div></div>
-                </div>
-                <div class="chatbox__footer">
-                    <input type="text" placeholder="Write a message..." />
-                    <button class="chatbox__send--footer send__button">Send</button>
+                <div class="chatbox__content--header">
+                    <h4 class="chatbox__heading--header">Chatbot</h4>
+                    <p class="chatbox__description--header">Hi! I'm here to help. How can I assist you today?</p>
                 </div>
             </div>
-            <div class="chatbox__button">
-                <button><img src="{{ url_for('static', filename='images/chatbox-icon.svg') }}" alt="Chat icon"></button>
+
+            <!-- Chatbox Messages -->
+            <div class="chatbox__messages">
+                <div id="chat-log"></div>
             </div>
+
+            <!-- Chatbox Footer -->
+            <div class="chatbox__footer">
+                <input type="text" id="message" placeholder="Write a message..." />
+                <button class="chatbox__send--footer send__button" id="send-button">Send</button>
+            </div>
+        </div>
+
+        <!-- Chatbox Toggle Button -->
+        <div class="chatbox__button">
+            <button id="chatbox-toggle">
+                <img src="{{ url_for('static', filename='images/chatbot.png') }}" alt="Chat icon">
+            </button>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
         const SCRIPT_ROOT = {{ request.script_root | tojson }};
     </script>
