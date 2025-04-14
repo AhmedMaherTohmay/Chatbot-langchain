@@ -51,6 +51,7 @@ part_1_graph = builder.compile(checkpointer=memory)
 
 ######################################### Output #########################################
 import uuid
+from langchain_core.messages.ai import AIMessage
 
 # Update with the backup file so we can restart from the original place in each section
 thread_id = str(uuid.uuid4())
@@ -63,13 +64,14 @@ config = {
 }
 
 def llm_response(message: str):
-    for chunk, metadata in part_1_graph.stream(   # streaming the output
+    for chunk, metadata in part_1_graph.stream(
         {"messages": message},
         config,
         stream_mode="messages",
     ):
-        if hasattr(chunk, "content"):  # Check if 'chunk' has a 'content' attribute
-            yield chunk.content 
+        # Check if it's an AIMessage with content
+        if isinstance(chunk, AIMessage) and chunk.content:
+            yield chunk.content
 
 if __name__ == "__main__":
     while True:
