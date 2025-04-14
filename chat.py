@@ -1,5 +1,5 @@
 #Python Packages
-from tools import lookup_policy, search_transactions
+from tools import App_Details, search_transactions
 from utils import create_tool_node_with_fallback
 from prompt import Assistant, bot_prompt
 from config.config import Config
@@ -17,7 +17,7 @@ genai.configure(api_key=gemini_api_key)
 
 # using gemnini api
 llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=gemini_api_key)
-part_1_tools = [search_transactions, lookup_policy]
+part_1_tools = [search_transactions, App_Details]
 part_1_assistant_runnable = bot_prompt() | llm.bind_tools(part_1_tools)
 
 ######################################### Graph #########################################
@@ -51,13 +51,6 @@ part_1_graph = builder.compile(checkpointer=memory)
 
 ######################################### Output #########################################
 import uuid
-
-# Let's create an example conversation a user might have with the assistant
-tutorial_questions = [
-    "Hi there, can you tell me about yourself?",
-    "Hi there, I cannot find the video transaction page can you provide me with it's link?",
-    "Can you tell me about the app",
-]
 
 # Update with the backup file so we can restart from the original place in each section
 thread_id = str(uuid.uuid4())

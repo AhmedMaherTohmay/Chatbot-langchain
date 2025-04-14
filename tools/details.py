@@ -21,7 +21,7 @@ def generate_embedding(text: str) -> list[float]:
 
 # Fetching the FAQ content
 response = requests.get(
-    "https://drive.usercontent.google.com/u/0/uc?id=1QTtXkjUUgNBBdjGczP1pj94O1U11hTB6&export=download"
+    "https://drive.usercontent.google.com/u/0/uc?id=1sL0m3OILGEsSnzkiSwkjB4fBC0ivuxRe&export=download"
 )
 response.raise_for_status()
 faq_text = response.text
@@ -60,7 +60,7 @@ class VectorStoreRetriever:
 # Initialize the retriever
 retriever = VectorStoreRetriever.from_docs(docs)
 @tool
-def lookup_policy(query: str) -> str:
+def App_Details(query: str) -> str:
     """Consult the company policies to check whether certain options are permitted.
     Use this before making any flight changes or performing other 'write' events."""
     docs = retriever.query(query, k=2)
@@ -69,4 +69,4 @@ def lookup_policy(query: str) -> str:
     return "\n\n".join([doc["page_content"] for doc in docs])
 
 if __name__ == "__main__":
-    print(lookup_policy("what is the app name"))
+    print(App_Details("what is the app name"))
