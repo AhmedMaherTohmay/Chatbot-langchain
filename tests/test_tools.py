@@ -1,5 +1,5 @@
 import pytest
-from tools import VectorStoreRetriever, generate_embedding, lookup_policy, search_transactions
+from tools import VectorStoreRetriever, generate_embedding, App_Details, search_transactions
 
 # Fixture for sample documents
 @pytest.fixture
@@ -18,25 +18,25 @@ def retriever(sample_docs):
 def test_lookup_policy_transaction_fee(retriever):
     """Test if the lookup_policy tool returns the correct transaction fee policy."""
     query = "What is the transaction fee?"
-    result = lookup_policy(query)
+    result = App_Details(query)
     assert "2%" in result
 
 def test_lookup_policy_refund_policy(retriever):
     """Test if the lookup_policy tool returns the correct refund policy."""
     query = "How long does a refund take?"
-    result = lookup_policy(query)
+    result = App_Details(query)
     assert "5 business days" in result
 
 def test_lookup_policy_app_support(retriever):
     """Test if the lookup_policy tool returns information about the PayNow app."""
     query = "Does PayNow support instant payments?"
-    result = lookup_policy(query)
+    result = App_Details(query)
     assert "instant payments" in result
 
 def test_lookup_policy_no_results(retriever):
     """Test the lookup_policy tool with no matching documents."""
     query = "What is the cancellation policy?"
-    result = lookup_policy(query)
+    result = App_Details(query)
     assert "I couldn't find any relevant information" in result
 
 def test_search_transactions():
