@@ -16,7 +16,6 @@ logging.basicConfig(
     format='%(asctime)s [%(levelname)s] %(message)s',
     handlers=[
         logging.FileHandler(os.path.join(log_folder, "app.log")),  # Save logs in the "logs" folder
-        logging.StreamHandler()  # Print logs to the console
     ]
 )
 
