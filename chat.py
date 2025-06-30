@@ -63,28 +63,44 @@ config = {
     }
 }
 
+from langchain_core.messages.ai import AIMessage
 def llm_response(message: str):
-    for chunk, metadata in part_1_graph.stream(
-        {"messages": message},
-        config,
-        stream_mode="messages",
-    ):
-        # Check if it's an AIMessage with content
-        if isinstance(chunk, AIMessage) and chunk.content:
-            yield chunk.content
+    full_response = ""
+    tool_calls = []
+
+    for chunk, metadata in part_1_graph.stream({"messages": message}, config, stream_mode="messages"):
+        if isinstance(chunk, AIMessage):
+            full_response += chunk.content or ""
+
+        if hasattr(chunk, "tool_calls") and chunk.tool_calls:
+            tool_calls.extend(
+                tool_call.get("args")
+                for tool_call in chunk.tool_calls
+                if tool_call.get("name") == "search_transactions"
+            )
+
+    return {
+        "response": full_response,
+        "tool_calls": tool_calls[0] if tool_calls else None
+    }
 
 if __name__ == "__main__":
     while True:
-        # Initialize the graph with the first question
         print("User: ", end='')
         user_question = input()
 
-        if user_question.lower() in ["quit", "exit", "end",'q','ex']:
+        if user_question.lower() in ["quit", "exit", "end", 'q', 'ex']:
             print("Assistant: Goodbye! Have a great day!")
-            break  # Exit the loop when the user says 'quit', 'exit', or 'end'
+            break
 
-        print("Assistant: ", end="")  # Print the prefix for the assistant's response
-        # Stream and print each chunk
-        for response_chunk in llm_response(user_question):
-            print(response_chunk, end="", flush=True)  # Print each chunk as it's received
-        print()  # Add a newline after the complete response
+        print("Assistant:")
+
+        # Call llm_response and print the complete result
+        responses = llm_response(user_question)
+        for response in responses:
+            # Print tool calls if any
+            if "tool_calls" in response:
+                print("Tool Call Arguments:", response["tool_calls"][0])
+            # Print the assistant's message
+            if "response" in response:
+                print(response["response"])

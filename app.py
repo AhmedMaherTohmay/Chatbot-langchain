@@ -52,16 +52,11 @@ def index_get():
 @app.route("/chat", methods=["POST"])
 def predict():
     msg = request.json
-    msg = json.dumps(msg)
     logging.info(f"Received chat message: {msg}")
 
-    # Stream the response from llm_response
-    def generate():
-        for chunk in llm_response(msg):
-            logging.info(f"Streaming response chunk: {chunk}")
-            yield f"data: {json.dumps({'response': chunk})}\n\n"  
+    result = llm_response(json.dumps(msg))  # Single dict now
 
-    return Response(stream_with_context(generate()), content_type="text/event-stream")
+    return jsonify(result)
 
 # Error handler to log exceptions
 @app.errorhandler(Exception)
