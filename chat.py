@@ -74,14 +74,14 @@ def llm_response(message: str):
 
         if hasattr(chunk, "tool_calls") and chunk.tool_calls:
             tool_calls.extend(
-                tool_call.get("args")
+                tool_call.get("args", {}).get("type_of_transaction")
                 for tool_call in chunk.tool_calls
                 if tool_call.get("name") == "search_transactions"
             )
 
     return {
         "response": full_response,
-        "tool_calls": tool_calls[0] if tool_calls else None
+        "Service": tool_calls[0] if tool_calls else None
     }
 
 if __name__ == "__main__":
@@ -95,12 +95,12 @@ if __name__ == "__main__":
 
         print("Assistant:")
 
-        # Call llm_response and print the complete result
-        responses = llm_response(user_question)
-        for response in responses:
-            # Print tool calls if any
-            if "tool_calls" in response:
-                print("Tool Call Arguments:", response["tool_calls"][0])
-            # Print the assistant's message
-            if "response" in response:
-                print(response["response"])
+        # Call llm_response and print the result
+        response = llm_response(user_question)
+        
+        # Print tool calls if any
+        if response["Service"]:
+            print("Tool Call Arguments:", response["Service"])
+
+        # Print the assistant's message
+        print(response["response"])

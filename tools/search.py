@@ -17,8 +17,12 @@ def search_transactions(type_of_transaction: Optional[str] = None) -> str:
     
     type_of_transaction = type_of_transaction.capitalize()
     transaction_pages = {
-        'Education': "https://studentactivities.zu.edu.eg/Students/Registration/ed_login.aspx",
-        'Electricity': "Services/elctricity/Billing"  # Note: Fixed typo from "elctricity" to "electricity"
+        'Electricity': "Services/elctricity/Billing",
+        'Water': "Services/water/Billing",
+        'Gas': "Services/gas/Billing",
+        'Internet': "Services/internet/Billing",
+        'Phone': "Services/phone/Billing",
+        'Reference_Number': "Services/Reference_Number/Billing",
     }
     return f'"{transaction_pages.get(type_of_transaction, "Transaction type not found.")}"'
 
